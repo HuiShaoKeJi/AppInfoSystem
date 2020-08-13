@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.dao.AppInfoMapper">
+    <!--int getTotalCount(QueryAppInfoVO queryAppInfoVO);-->
+    <select id="getTotalCount" resultType="_int">
+        select count(1) from app_info
+          <where>
+              <if test="querySoftwareName != null and querySoftwareName != '' ">
+                  and softwareName like CONCAT('%',#{querySoftwareName},'%')
+              </if>
+              <if test="queryStatus != null">
+                  and status = #{queryStatus}
+              </if>
+              <if test="queryFlatformId != null">
+                  and flatformId = #{queryFlatformId}
+              </if>
+              <if test="queryCategoryLevel1 != null">
+                  and categoryLevel1 = #{queryCategoryLevel1}
+              </if>
+              <if test="queryCategoryLevel2 != null">
+                  and categoryLevel2 = #{queryCategoryLevel2}
+              </if>
+              <if test="queryCategoryLevel3 != null">
+                  and categoryLevel3 = #{queryCategoryLevel3}
+              </if>
+          </where>
+    </select>
+    <!--List<AppInfo> findAppInfo(@Param("startIndex")int startIndex,@Param("pageSize") int pageSize);-->
+    <select id="findAppInfo" resultType="appInfo">
+        select
+            i.id,i.softwareName,i.APKName,i.supportROM,i.interfaceLanguage,i.softwareSize,i.updateDate,i.devId,i.appInfo,i.onSaleDate,i.offSaleDate,
+            i.downloads,i.createdBy,i.creationDate,i.modifyBy,i.modifyDate,i.logoPicPath,i.logoLocPath,
+            i.flatformId,(select d.valueName from data_dictionary d where d.valueId = i.flatformId and d.typeCode = "APP_FLATFORM") as flatformName,
+            i.`status`,(select d.valueName from data_dictionary d where d.valueId = i.`status` and d.typeCode = "APP_STATUS" ) as statusName,
+            i.versionId,(select v.versionNo from app_version v where v.id = i.versionId ) as versionNo,
+            i.categoryLevel1,(select c.categoryName from app_category c where c.id = i.categoryLevel1) as categoryLevel1Name,
+            i.categoryLevel2,(select c.categoryName from app_category c where c.id = i.categoryLevel2) as categoryLevel2Name,
+            i.categoryLevel3,(select c.categoryName from app_category c where c.id = i.categoryLevel3) as categoryLevel3Name
+            from `app_info` i
+                <where>
+                    <if test="querySoftwareName != null and querySoftwareName != '' ">
+                        and softwareName like CONCAT('%',#{querySoftwareName},'%')
+                    </if>
+                    <if test="queryStatus != null">
+                        and status = #{queryStatus}
+                    </if>
+                    <if test="queryFlatformId != null">
+                        and flatformId = #{queryFlatformId}
+                    </if>
+                    <if test="queryCategoryLevel1 != null">
+                        and categoryLevel1 = #{queryCategoryLevel1}
+                    </if>
+                    <if test="queryCategoryLevel2 != null">
+                        and categoryLevel2 = #{queryCategoryLevel2}
+                    </if>
+                    <if test="queryCategoryLevel3 != null">
+                        and categoryLevel3 = #{queryCategoryLevel3}
+                    </if>
+                </where>
+                    order by i.creationDate desc,i.modifyDate desc
+                      limit #{startIndex},#{pageSize}
+    </select>
+    <!--List<DataDictionary> findDictionaryList(String param);-->
+    <select id="findDictionaryList" resultType="dataDictionary" parameterType="String">
+        select * from `data_dictionary` where typeCode = #{param}
+    </select>
+</mapper>
