@@ -15,4 +15,5 @@ public class AppCategoryServiceImpl implements AppCategoryService {
     public List<AppCategory> getAppCategoryListByParentiId(Integer pid) {
         return appCategoryMapper.getAppCategoryListByParentiId(pid);
     }
+
 }

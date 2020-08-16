@@ -66,4 +66,26 @@
     <select id="findDictionaryList" resultType="dataDictionary" parameterType="String">
         select * from `data_dictionary` where typeCode = #{param}
     </select>
+
+    <!--AppInfo apkNameExist(String apkName);-->
+    <select id="apkNameExist" parameterType="String" resultType="appInfo">
+        select * from `app_info` where APKName = #{apkName};
+    </select>
+
+    <!--List<DataDictionary> findDictionaryflatFormList(String tcode);-->
+    <select id="findDictionaryflatFormList" parameterType="String" resultType="dataDictionary">
+        select * from `data_dictionary` where typeCode = #{tcode}
+    </select>
+
+    <!--int appInfoAdd(AppInfo appInfo);-->
+    <insert id="appInfoAdd">
+                insert into  app_info values (
+          #{id},#{softwareName},#{APKName},#{supportROM},
+          #{interfaceLanguage},#{softwareSize},#{updateDate},#{devId},
+          #{appInfo},#{status},#{onSaleDate},#{offSaleDate},
+          #{flatformId},#{categoryLevel3},#{downloads},#{createdBy},
+          #{creationDate},#{modifyBy},#{modifyDate},#{categoryLevel1},
+          #{categoryLevel2},#{logoPicPath},#{logoLocPath},#{versionId}
+          );
+    </insert>
 </mapper>

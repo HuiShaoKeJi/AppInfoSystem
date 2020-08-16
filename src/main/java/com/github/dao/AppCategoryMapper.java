@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AppCategoryMapper {
     List<AppCategory> getAppCategoryListByParentiId(@Param("pid") Integer pid);
+
 }
